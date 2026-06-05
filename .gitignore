@@ -1,0 +1,17 @@
+
+# Functions use the .func directory for local runtime data which should
+# generally not be tracked in source control. To instruct the system to track
+# .func in source control, comment the following line (prefix it with '# ').
+/.func
+/.venv
+captcha-images
+.env
+poona.ffbad.org.har
+.claude
+
+# Terraform — local state and variable files with sensitive values
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfvars
+terraform/*.tfstate
+terraform/*.tfstate.backup
