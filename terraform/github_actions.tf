@@ -20,8 +20,9 @@ resource "google_iam_workload_identity_pool_provider" "poona-adherents-update" {
   }
 
   attribute_mapping = {
-    "google.subject"       = "assertion.sub"
-    "attribute.actor"      = "assertion.actor"
+    "google.subject"          = "assertion.sub"
+    "attribute.actor"         = "assertion.actor"
+    "attribute.repository"    = "assertion.repository"
     "attribute.repository_id" = "assertion.repository_id"
   }
 
@@ -34,6 +35,7 @@ resource "google_project_iam_member" "terraform_deployer" {
     "roles/serviceusage.serviceUsageAdmin",
     "roles/iam.serviceAccountAdmin",
     "roles/iam.workloadIdentityPoolAdmin",
+    "roles/resourcemanager.projectIamAdmin",
     "roles/secretmanager.admin",
     "roles/monitoring.notificationChannelEditor",
   ])
