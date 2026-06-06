@@ -58,3 +58,9 @@ resource "google_service_account_iam_member" "wif_impersonation" {
   role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/jeremyalbrecht/poona-adherents-update"
 }
+
+resource "google_storage_bucket_iam_member" "terraform_deployer" {
+  bucket = google_storage_bucket.augny_badminton_tfstate.name
+  member = "serviceAccount:${google_service_account.terraform_deployer.email}"
+  role   = "roles/storage.admin"
+}
