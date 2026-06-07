@@ -14,40 +14,19 @@ run:
     - name: POONA_EXPORT_TEMPLATE_ID
       value: "26292"
     - name: POONA_USERNAME
-      valueFrom:
-        secretKeyRef:
-          name: update-poona-secrets
-          key: POONA_USERNAME
+      value: "{{ secrets.POONA_USERNAME }}"
     - name: POONA_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: update-poona-secrets
-          key: POONA_PASSWORD
+      value: "{{ secrets.POONA_PASSWORD }}"
     - name: GOOGLE_SHEETS_ID
-      valueFrom:
-        secretKeyRef:
-          name: update-poona-secrets
-          key: GOOGLE_SHEETS_ID
+      value: "{{ secrets.GOOGLE_SHEETS_ID }}"
     - name: GOOGLE_SHEET_NAME
-      valueFrom:
-        secretKeyRef:
-          name: update-poona-secrets
-          key: GOOGLE_SHEET_NAME
+      value: "{{ secrets.GOOGLE_SHEET_NAME }}"
     - name: GOOGLE_SERVICE_ACCOUNT_JSON
-      valueFrom:
-        secretKeyRef:
-          name: update-poona-secrets
-          key: GOOGLE_SERVICE_ACCOUNT_JSON
+      value: "{{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}"
     - name: OPENAI_API_KEY
-      valueFrom:
-        secretKeyRef:
-          name: update-poona-secrets
-          key: OPENAI_API_KEY
+      value: "{{ secrets.OPENAI_API_KEY }}"
     - name: POONA_SECRET_NAME
-      valueFrom:
-        secretKeyRef:
-          name: update-poona-secrets
-          key: POONA_SECRET_NAME
+      value: "{{ secrets.POONA_SECRET_NAME }}"
 deploy:
   options:
     scale:
