@@ -5,27 +5,47 @@ name: update-poona
 runtime: python
 created: 2026-06-02T08:37:16.948834+02:00
 registry: docker.io/jeremyalbrecht
+namespace: augny-badminton
 run:
   envs:
-    - name: POONA_USERNAME
-      value: "{{ env:POONA_USERNAME }}"
-    - name: POONA_PASSWORD
-      value: "{{ env:POONA_PASSWORD }}"
     - name: POONA_EXPORT_TEMPLATE_ID
       value: "26292"
+    - name: POONA_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: update-poona-secrets
+          key: POONA_USERNAME
+    - name: POONA_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: update-poona-secrets
+          key: POONA_PASSWORD
     - name: GOOGLE_SHEETS_ID
-      value: "{{ env:GOOGLE_SHEETS_ID }}"
+      valueFrom:
+        secretKeyRef:
+          name: update-poona-secrets
+          key: GOOGLE_SHEETS_ID
     - name: GOOGLE_SHEET_NAME
-      value: "{{ env:GOOGLE_SHEET_NAME }}"
+      valueFrom:
+        secretKeyRef:
+          name: update-poona-secrets
+          key: GOOGLE_SHEET_NAME
     - name: GOOGLE_SERVICE_ACCOUNT_JSON
-      value: "{{ env:GOOGLE_SERVICE_ACCOUNT_JSON }}"
+      valueFrom:
+        secretKeyRef:
+          name: update-poona-secrets
+          key: GOOGLE_SERVICE_ACCOUNT_JSON
     - name: OPENAI_API_KEY
-      value: "{{ env:OPENAI_API_KEY }}"
+      valueFrom:
+        secretKeyRef:
+          name: update-poona-secrets
+          key: OPENAI_API_KEY
     - name: POONA_SECRET_NAME
-      value: "{{ env:POONA_SECRET_NAME }}"
+      valueFrom:
+        secretKeyRef:
+          name: update-poona-secrets
+          key: POONA_SECRET_NAME
 deploy:
-  annotations:
-    run.googleapis.com/timeout: "300s"
   options:
     scale:
       min: 0
