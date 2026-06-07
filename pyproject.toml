@@ -1,0 +1,31 @@
+[project]
+name = "poona-update"
+description = "Update the list of members in the Google Drive sheets for Augny Badminton Club using data from Poona."
+version = "0.1.0"
+requires-python = ">=3.10"
+readme = "README.md"
+license = "MIT"
+dependencies = [
+  "httpx",
+  "beautifulsoup4",
+  "pillow",
+  "pytesseract",
+  "openai",
+  "google-api-python-client",
+  "google-auth",
+  "google-cloud-secret-manager",
+  "pytest",
+  "pytest-asyncio"
+]
+authors = [
+  { name="Jérémy Albrecht"},
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+
