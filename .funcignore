@@ -9,7 +9,9 @@
 .idea/
 .claude/
 .pytest_cache/
-.func/
+.func/blob-cache/
+.func/local.yaml
+.func/runs/
 
 # Secrets & credentials
 .env

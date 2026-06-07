@@ -6,6 +6,9 @@ runtime: python
 created: 2026-06-02T08:37:16.948834+02:00
 registry: docker.io/jeremyalbrecht
 namespace: augny-badminton
+build:
+  builderImages:
+    pack: ghcr.io/knative/builder-jammy-base:latest
 run:
   envs:
     - name: POONA_EXPORT_TEMPLATE_ID
