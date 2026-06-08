@@ -32,5 +32,4 @@ __pycache__/
 *.pyo
 
 # Docs
-README.md
 CLAUDE.md
