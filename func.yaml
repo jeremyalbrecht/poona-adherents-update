@@ -16,9 +16,9 @@ run:
     - name: POONA_USERNAME
       value: "{{ secret:update-poona-secrets:POONA_USERNAME }}"
     - name: POONA_PASSWORD
-      value: "{{ secrets:update-poona-secrets:POONA_PASSWORD }}"
+      value: "{{ secret:update-poona-secrets:POONA_PASSWORD }}"
     - name: GOOGLE_SHEETS_ID
-      value: "{{ secrets:update-poona-secrets:GOOGLE_SHEETS_ID }}"
+      value: "{{ secret:update-poona-secrets:GOOGLE_SHEETS_ID }}"
     - name: GOOGLE_SHEET_NAME
       value: "{{ secret:update-poona-secrets:GOOGLE_SHEET_NAME }}"
     - name: GOOGLE_SERVICE_ACCOUNT_JSON
