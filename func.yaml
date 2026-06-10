@@ -12,10 +12,10 @@ build:
     pack: ghcr.io/knative/builder-jammy-base:latest
   builder: pack
   buildpacks:
-    - docker.io/paketobuildpacks/ca-certificates
+    - urn:cnb:builder:paketo-buildpacks/ca-certificates
     - docker.io/paketobuildpacks/apt:0.1.0
-    - docker.io/paketobuildpacks/python
-    - docker.io/paketobuildpacks/procfile
+    - urn:cnb:builder:paketo-buildpacks/python
+    - urn:cnb:builder:paketo-buildpacks/procfile
 run:
   envs:
   - name: POONA_EXPORT_TEMPLATE_ID
