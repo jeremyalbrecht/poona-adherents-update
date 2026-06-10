@@ -9,10 +9,8 @@ namespace: augny-badminton
 created: 2026-06-02T08:37:16.948834+02:00
 build:
   builderImages:
-    pack: ghcr.io/knative/builder-jammy-base:latest
+    pack: ghcr.io/knative/builder-jammy-full:latest
   builder: pack
-  buildpacks:
-    - docker.io/paketobuildpacks/apt:0.1.0
 run:
   envs:
   - name: POONA_EXPORT_TEMPLATE_ID
