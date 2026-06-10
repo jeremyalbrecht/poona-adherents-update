@@ -3,31 +3,37 @@
 specVersion: 0.36.0
 name: update-poona
 runtime: python
-created: 2026-06-02T08:37:16.948834+02:00
 registry: docker.io/jeremyalbrecht
+image: docker.io/jeremyalbrecht/update-poona:latest
 namespace: augny-badminton
+created: 2026-06-02T08:37:16.948834+02:00
 build:
   builderImages:
     pack: ghcr.io/knative/builder-jammy-base:latest
+  builder: pack
+  buildpacks:
+    - gcr.io/paketo-buildpacks/apt
 run:
   envs:
-    - name: POONA_EXPORT_TEMPLATE_ID
-      value: "26292"
-    - name: POONA_USERNAME
-      value: "{{ secret:update-poona-secrets:POONA_USERNAME }}"
-    - name: POONA_PASSWORD
-      value: "{{ secret:update-poona-secrets:POONA_PASSWORD }}"
-    - name: GOOGLE_SHEETS_ID
-      value: "{{ secret:update-poona-secrets:GOOGLE_SHEETS_ID }}"
-    - name: GOOGLE_SHEET_NAME
-      value: "{{ secret:update-poona-secrets:GOOGLE_SHEET_NAME }}"
-    - name: GOOGLE_SERVICE_ACCOUNT_JSON
-      value: "{{ secret:update-poona-secrets:GOOGLE_SERVICE_ACCOUNT_JSON }}"
-    - name: OPENAI_API_KEY
-      value: "{{ secret:update-poona-secrets:OPENAI_API_KEY }}"
-    - name: POONA_SECRET_NAME
-      value: "{{ secret:update-poona-secrets:POONA_SECRET_NAME }}"
+  - name: POONA_EXPORT_TEMPLATE_ID
+    value: "26292"
+  - name: POONA_USERNAME
+    value: '{{ secret:update-poona-secrets:POONA_USERNAME }}'
+  - name: POONA_PASSWORD
+    value: '{{ secret:update-poona-secrets:POONA_PASSWORD }}'
+  - name: GOOGLE_SHEETS_ID
+    value: '{{ secret:update-poona-secrets:GOOGLE_SHEETS_ID }}'
+  - name: GOOGLE_SHEET_NAME
+    value: '{{ secret:update-poona-secrets:GOOGLE_SHEET_NAME }}'
+  - name: GOOGLE_SERVICE_ACCOUNT_JSON
+    value: '{{ secret:update-poona-secrets:GOOGLE_SERVICE_ACCOUNT_JSON }}'
+  - name: OPENAI_API_KEY
+    value: '{{ secret:update-poona-secrets:OPENAI_API_KEY }}'
+  - name: POONA_SECRET_NAME
+    value: '{{ secret:update-poona-secrets:POONA_SECRET_NAME }}'
 deploy:
+  namespace: augny-badminton
+  image: docker.io/jeremyalbrecht/update-poona:latest
   options:
     scale:
       min: 0
