@@ -29,7 +29,7 @@ jobs:
           chmod +x /usr/local/bin/func
 
       - name: Build and push
-        run: func build --builder-image ghcr.io/knative/builder-jammy-base:latest --platform linux/amd64 --push
+        run: func build --builder-image ghcr.io/knative/builder-jammy-full:latest --platform linux/amd64 --push
 
       - name: Tag with git SHA
         run: |
