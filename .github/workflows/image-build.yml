@@ -28,11 +28,8 @@ jobs:
             -o /usr/local/bin/func
           chmod +x /usr/local/bin/func
 
-      - name: Build
-        run: func build --builder-image ghcr.io/knative/builder-jammy-base:latest --platform linux/amd64
-
-      - name: Push
-        run: docker push docker.io/jeremyalbrecht/update-poona:latest
+      - name: Build and push
+        run: func build --builder-image ghcr.io/knative/builder-jammy-base:latest --platform linux/amd64 --push
 
       - name: Tag with git SHA
         run: |

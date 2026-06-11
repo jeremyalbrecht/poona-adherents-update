@@ -3,27 +3,19 @@ import csv
 import io
 import json
 import logging
-import os
 import re
-from pathlib import Path
 from urllib.parse import unquote, urljoin
 
+import ddddocr
 import httpx
-import pytesseract
 from bs4 import BeautifulSoup
 from google.cloud import secretmanager
 from google.cloud.secretmanager_v1.types import SecretVersion
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from openai import OpenAI
-from PIL import Image
 
 BASE_URL = "https://poona.ffbad.org"
-
-# Use tessdata bundled alongside this module when available.
-_TESSDATA_DIR = Path(__file__).parent / "tessdata"
-if _TESSDATA_DIR.exists():
-    os.environ["TESSDATA_PREFIX"] = str(_TESSDATA_DIR)
 
 
 def new():
@@ -40,6 +32,7 @@ class PoonaUpdate:
         self.sheet_id = cfg["GOOGLE_SHEETS_ID"]
         self.sheet_name = cfg["GOOGLE_SHEET_NAME"]
         self._openai = OpenAI(api_key=cfg["OPENAI_API_KEY"])
+        self._ocr = ddddocr.DdddOcr(show_ad=False)
         self._secret_name = cfg.get("POONA_SECRET_NAME")
 
         sa_info = json.loads(cfg["GOOGLE_SERVICE_ACCOUNT_JSON"])
@@ -282,8 +275,7 @@ class PoonaUpdate:
     def _ocr_option_labels(self, options):
         result = []
         for code, src in options:
-            image = self._image_from_data_uri(src)
-            text = pytesseract.image_to_string(image, lang="fra").strip()
+            text = self._ocr.classification(self._bytes_from_data_uri(src)).strip()
             result.append((code, text))
         return result
 
@@ -326,11 +318,11 @@ class PoonaUpdate:
         return option_labels[0][0]
 
     @staticmethod
-    def _image_from_data_uri(uri):
+    def _bytes_from_data_uri(uri):
         if not uri.startswith("data:"):
             raise ValueError("Unsupported captcha image source")
         _, encoded = uri.split(",", 1)
-        return Image.open(io.BytesIO(base64.b64decode(encoded)))
+        return base64.b64decode(encoded)
 
     def _extract_captcha_script_data(self, html):
         token_fields = []

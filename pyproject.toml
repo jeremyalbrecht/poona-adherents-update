@@ -8,8 +8,7 @@ license = "MIT"
 dependencies = [
   "httpx",
   "beautifulsoup4",
-  "pillow",
-  "pytesseract",
+  "ddddocr",
   "openai",
   "google-api-python-client",
   "google-auth",

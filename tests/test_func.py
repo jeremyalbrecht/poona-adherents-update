@@ -5,7 +5,6 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
-import pytesseract
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -161,9 +160,17 @@ def test_solve_captcha_returns_empty_when_no_captcha_widget():
     assert result == ""
 
 
-def test_solve_captcha_uses_ocr_and_vision_to_pick_correct_code(monkeypatch):
+def _fake_ocr(labels):
+    it = iter(labels)
+    fake = MagicMock()
+    fake.classification.side_effect = lambda _bytes: next(it)
+    return fake
+
+
+def test_solve_captcha_uses_ocr_and_vision_to_pick_correct_code():
     updater = PoonaUpdate()
     updater._openai = _fake_openai_client("1")  # Vision API picks option 1
+    updater._ocr = _fake_ocr(["Un nuage", "Un bateau"])
 
     target = _make_data_uri(color=100)
     opt_nuage = _make_data_uri(color=200)
@@ -178,17 +185,15 @@ def test_solve_captcha_uses_ocr_and_vision_to_pick_correct_code(monkeypatch):
       </ul>
     </body></html>
     """
-
-    ocr_labels = iter(["Un nuage", "Un bateau"])
-    monkeypatch.setattr(pytesseract, "image_to_string", lambda img, lang=None: next(ocr_labels))
 
     result = updater._solve_captcha(html)
     assert result == "CODE_NUAGE"
 
 
-def test_solve_captcha_vision_picks_second_option(monkeypatch):
+def test_solve_captcha_vision_picks_second_option():
     updater = PoonaUpdate()
     updater._openai = _fake_openai_client("2")  # Vision API picks option 2
+    updater._ocr = _fake_ocr(["Un nuage", "Un bateau"])
 
     target = _make_data_uri(color=100)
     opt_nuage = _make_data_uri(color=200)
@@ -203,9 +208,6 @@ def test_solve_captcha_vision_picks_second_option(monkeypatch):
       </ul>
     </body></html>
     """
-
-    ocr_labels = iter(["Un nuage", "Un bateau"])
-    monkeypatch.setattr(pytesseract, "image_to_string", lambda img, lang=None: next(ocr_labels))
 
     result = updater._solve_captcha(html)
     assert result == "CODE_BATEAU"
