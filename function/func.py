@@ -438,13 +438,23 @@ class PoonaUpdate:
             ])
         return result
 
-    def _recreate_table(self, sheet_meta, sheet_id_num, num_rows):
+    def _delete_tables(self, sheet_meta):
         requests = [
             {"deleteTable": {"tableId": t["tableId"]}}
             for t in sheet_meta.get("tables", [])
         ]
-        if num_rows > 0:
-            requests.append({
+        if requests:
+            self.sheet.spreadsheets().batchUpdate(
+                spreadsheetId=self.sheet_id,
+                body={"requests": requests},
+            ).execute()
+
+    def _add_table(self, sheet_id_num, num_rows):
+        if num_rows <= 0:
+            return
+        self.sheet.spreadsheets().batchUpdate(
+            spreadsheetId=self.sheet_id,
+            body={"requests": [{
                 "addTable": {
                     "table": {
                         "name": "Joueurs",
@@ -457,12 +467,8 @@ class PoonaUpdate:
                         },
                     }
                 }
-            })
-        if requests:
-            self.sheet.spreadsheets().batchUpdate(
-                spreadsheetId=self.sheet_id,
-                body={"requests": requests},
-            ).execute()
+            }]},
+        ).execute()
 
     def _update_sheet(self, csv_content):
         rows = self._transform_rows(csv_content)
@@ -478,6 +484,10 @@ class PoonaUpdate:
         existing = api.get(spreadsheetId=self.sheet_id, range=self.sheet_name).execute()
         old_rows = existing.get("values", [])
 
+        # Delete tables before clearing/writing — deleteTable wipes cell data,
+        # so it must happen before we populate the sheet with new rows.
+        self._delete_tables(sheet_meta)
+
         api.clear(spreadsheetId=self.sheet_id, range=self.sheet_name).execute()
         if rows:
             api.update(
@@ -487,7 +497,7 @@ class PoonaUpdate:
                 body={"values": rows},
             ).execute()
 
-        self._recreate_table(sheet_meta, sheet_id_num, len(rows))
+        self._add_table(sheet_id_num, len(rows))
 
         diff = self._compute_diff(old_rows, rows)
         logging.info(
