@@ -44,6 +44,7 @@ resource "google_project_iam_member" "terraform_deployer" {
   member     = "serviceAccount:${google_service_account.terraform_deployer.email}"
   depends_on = [google_project_service.cloudresourcemanager]
 }
+
 resource "google_billing_account_iam_member" "terraform_deployer" {
   billing_account_id = var.billing_account_id
   role               = "roles/billing.costsManager"
