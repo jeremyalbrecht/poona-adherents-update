@@ -37,6 +37,7 @@ resource "google_project_iam_member" "terraform_deployer" {
     "roles/iam.workloadIdentityPoolAdmin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/secretmanager.admin",
+    "roles/monitoring.notificationChannelEditor",
     "roles/iam.oauthClientAdmin"
   ])
   project    = var.project_id
