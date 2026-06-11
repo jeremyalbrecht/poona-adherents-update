@@ -45,7 +45,7 @@ The `function/func.py` module exposes `new()` which returns a `PoonaUpdate` inst
 
 Poona uses a custom anti-robot widget with obfuscated JS. The solve pipeline in `_build_captcha_payload` / `_solve_captcha`:
 1. **Deobfuscate** the inline `<script>` using `_decode_poona_obfuscated_script` to extract `values[]`/`hashs[]` arrays and the dynamic hidden field names.
-2. **OCR** each option image via `ddddocr` (pure-Python ONNX, no system binary required).
+2. **OCR** each option image via `rapidocr-onnxruntime` (pure-Python ONNX, multilingual incl. French, no system binary required).
 3. **Vision match** the target image against OCR labels using `gpt-4o` via `openai.responses.create`.
 4. Look up the precomputed server token for the winning option code and fill the dynamic hidden fields.
 

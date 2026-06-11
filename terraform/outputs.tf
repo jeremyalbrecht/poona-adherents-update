@@ -17,3 +17,13 @@ output "terraform_deployer_email" {
   description = "Add as TF_SERVICE_ACCOUNT secret in GitHub repository settings"
   value       = google_service_account.terraform_deployer.email
 }
+
+output "oauth_client_id" {
+  description = "Client ID for OAuth login in Cashier webapp"
+  value = google_iam_oauth_client.cashier.client_id
+}
+
+output "oauth_client_secret" {
+  description = "Client Secret for OAuth login in Cashier webapp"
+  value = google_iam_oauth_client_credential.cashier-credentials.client_secret
+}

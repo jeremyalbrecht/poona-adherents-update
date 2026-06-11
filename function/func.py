@@ -6,7 +6,6 @@ import logging
 import re
 from urllib.parse import unquote, urljoin
 
-import ddddocr
 import httpx
 from bs4 import BeautifulSoup
 from google.cloud import secretmanager
@@ -14,6 +13,7 @@ from google.cloud.secretmanager_v1.types import SecretVersion
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from openai import OpenAI
+from rapidocr_onnxruntime import RapidOCR
 
 BASE_URL = "https://poona.ffbad.org"
 
@@ -32,7 +32,7 @@ class PoonaUpdate:
         self.sheet_id = cfg["GOOGLE_SHEETS_ID"]
         self.sheet_name = cfg["GOOGLE_SHEET_NAME"]
         self._openai = OpenAI(api_key=cfg["OPENAI_API_KEY"])
-        self._ocr = ddddocr.DdddOcr(show_ad=False)
+        self._ocr = RapidOCR()
         self._secret_name = cfg.get("POONA_SECRET_NAME")
 
         sa_info = json.loads(cfg["GOOGLE_SERVICE_ACCOUNT_JSON"])
@@ -275,7 +275,8 @@ class PoonaUpdate:
     def _ocr_option_labels(self, options):
         result = []
         for code, src in options:
-            text = self._ocr.classification(self._bytes_from_data_uri(src)).strip()
+            ocr_result, _ = self._ocr(self._bytes_from_data_uri(src))
+            text = " ".join(item[1] for item in ocr_result).strip() if ocr_result else ""
             result.append((code, text))
         return result
 

@@ -162,9 +162,12 @@ def test_solve_captcha_returns_empty_when_no_captcha_widget():
 
 def _fake_ocr(labels):
     it = iter(labels)
-    fake = MagicMock()
-    fake.classification.side_effect = lambda _bytes: next(it)
-    return fake
+
+    def _call(_bytes):
+        text = next(it)
+        return ([[[[0, 0], [1, 0], [1, 1], [0, 1]], text, 0.99]], [0.01])
+
+    return MagicMock(side_effect=_call)
 
 
 def test_solve_captcha_uses_ocr_and_vision_to_pick_correct_code():
