@@ -9,6 +9,8 @@ dependencies = [
   "httpx",
   "beautifulsoup4",
   "rapidocr-onnxruntime",
+  # Overrides rapidocr's transitive opencv-python; headless avoids libxcb/libGL at runtime.
+  "opencv-python-headless",
   "openai",
   "google-api-python-client",
   "google-auth",
