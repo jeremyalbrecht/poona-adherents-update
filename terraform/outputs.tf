@@ -26,4 +26,5 @@ output "oauth_client_id" {
 output "oauth_client_secret" {
   description = "Client Secret for OAuth login in Cashier webapp"
   value = google_iam_oauth_client_credential.cashier-credentials.client_secret
+  sensitive = true
 }
